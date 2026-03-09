@@ -2,9 +2,11 @@
 
 import type { RentPoint } from "../lib/schema";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Line,
-  LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -43,40 +45,59 @@ export function RentTrendChart({ rentTrend }: RentTrendChartProps) {
 
   return (
     <section className="grid gap-4">
-      <h3 className="text-xl font-bold tracking-tight text-slate-900">Rent Over Time</h3>
+      <h3
+        style={{
+          margin: 0,
+          color: "var(--text-strong)",
+          fontFamily: "var(--font-display)",
+          fontSize: "var(--step-1)",
+        }}
+      >
+        Rent Over Time
+      </h3>
 
       <div
-        className="w-full overflow-x-auto"
+        className="w-full"
+        style={{ width: "100%", height: "clamp(280px, 50vw, 400px)" }}
         role="img"
         aria-label="Historical Rent Trend Chart"
         aria-describedby="rent-trend-summary"
         title="Historical Rent Trend Chart"
       >
-        <LineChart width={760} height={320} data={chartData} margin={{ top: 20, right: 20, left: 10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis
-            dataKey="shortDate"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#94a3b8" }}
-          />
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#94a3b8" }}
-          />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: "#ffffff",
-              border: "1px solid #e2e8f0",
-              borderRadius: "0.75rem",
-              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
-              color: "#0f172a",
-            }}
-            labelStyle={{ color: "#0f172a", fontWeight: 600 }}
-          />
-          <Line type="monotone" dataKey="rent" stroke="#3b82f6" strokeWidth={3} dot={false} />
-        </LineChart>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={280}
+          minHeight={280}
+          initialDimension={{ width: 760, height: 320 }}
+        >
+          <AreaChart data={chartData} margin={{ top: 20, right: 20, left: 10, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-stroke)" />
+            <XAxis
+              dataKey="shortDate"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "var(--text-muted)", fontSize: 12 }}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "var(--text-muted)", fontSize: 12 }}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "var(--bg-section)",
+                border: "1px solid var(--grid-stroke)",
+                borderRadius: "0.75rem",
+                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
+                color: "var(--text-strong)",
+              }}
+              labelStyle={{ color: "var(--text-strong)", fontWeight: 600 }}
+            />
+            <Area type="monotone" dataKey="rent" stroke="none" fill="var(--trend-fill)" />
+            <Line type="monotone" dataKey="rent" stroke="var(--trend-line)" strokeWidth={3} dot={false} />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
 
       <p
@@ -96,7 +117,7 @@ export function RentTrendChart({ rentTrend }: RentTrendChartProps) {
         {srSummary}
       </p>
 
-      <p className="text-slate-700 leading-relaxed">
+      <p className="story-body" style={{ margin: 0 }}>
         Over the last several years, average rent in Essex County has skyrocketed, far outpacing
         standard minimum wage increases.
       </p>

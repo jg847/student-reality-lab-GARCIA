@@ -1,0 +1,104 @@
+:root {
+  --bg-page: #f2f5f7;
+  --bg-section: #ffffff;
+  --text-strong: #0f1a20;
+  --text-body: #33434d;
+  --text-muted: #5b6b76;
+
+  --burden-safe: #2f7a62;
+  --burden-urgent: #b74c3f;
+  --burden-threshold: #9f3a2f;
+  --trend-line: #2f5f8f;
+  --trend-fill: rgba(47, 95, 143, 0.16);
+  --grid-stroke: #d8e0e6;
+
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+
+  --step--1: 0.92rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.55rem;
+  --step-3: 2.15rem;
+  --step-callout: clamp(2.6rem, 8vw, 4.2rem);
+
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+
+  --radius-card: 16px;
+  --shadow-card: 0 12px 34px rgba(15, 26, 32, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top right, #e5edf2 0%, var(--bg-page) 45%, #eef2f5 100%);
+  color: var(--text-body);
+  font-family: var(--font-body);
+}
+
+.story-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.story-title {
+  color: var(--text-strong);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-5);
+}
+
+.story-section {
+  margin-bottom: var(--space-6);
+}
+
+.story-section h2 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.story-body {
+  margin: 0 0 var(--space-4);
+  line-height: 1.65;
+  color: var(--text-body);
+  font-size: var(--step-0);
+}
+
+.story-card {
+  background: var(--bg-section);
+  border: 1px solid #dce5eb;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+}
+
+.chart-note {
+  color: var(--text-muted);
+  font-size: var(--step--1);
+}
+
+@media (max-width: 640px) {
+  .story-shell {
+    padding: var(--space-5) var(--space-3);
+  }
+
+  .story-card {
+    padding: var(--space-3);
+  }
+}

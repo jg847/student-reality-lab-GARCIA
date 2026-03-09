@@ -5,6 +5,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  ResponsiveContainer,
   ReferenceLine,
   XAxis,
   YAxis,
@@ -33,20 +34,39 @@ export function RentBurden({ currentMonthlyRent, livingWage }: RentBurdenProps) 
     };
   }, [currentMonthlyRent, hasRoommate, hourlyWage]);
 
-  const barColor = rentBurdenPercentage > 30 ? "#f43f5e" : "#10b981";
+  const barColor = rentBurdenPercentage > 30 ? "var(--burden-urgent)" : "var(--burden-safe)";
 
   return (
     <section className="grid gap-6">
       <div className="grid gap-2">
-        <p className="text-sm uppercase tracking-wide text-slate-500">Current Scenario</p>
-        <div className="text-5xl font-black transition-colors duration-300 text-slate-900">
+        <p className="chart-note" style={{ margin: 0, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          Current Scenario
+        </p>
+        <div
+          style={{
+            margin: 0,
+            color: "var(--text-strong)",
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--step-callout)",
+            lineHeight: 1,
+          }}
+        >
           ${hourlyWage.toFixed(0)}/hr
         </div>
         <div
-          className="text-5xl font-black transition-colors duration-300"
+          className="transition-colors duration-300"
           style={{ color: barColor }}
         >
-          {rentBurdenPercentage.toFixed(2)}%
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--step-callout)",
+              fontWeight: 700,
+              lineHeight: 1,
+            }}
+          >
+            {rentBurdenPercentage.toFixed(2)}%
+          </span>
         </div>
       </div>
 
@@ -84,11 +104,13 @@ export function RentBurden({ currentMonthlyRent, livingWage }: RentBurdenProps) 
         </label>
       </div>
 
-      <div className="grid gap-1 text-sm text-slate-600">
+      <div className="grid gap-1" style={{ color: "var(--text-muted)", fontSize: "var(--step--1)" }}>
         <p>Selected Hourly Wage: ${hourlyWage.toFixed(0)}</p>
         <p>Effective Monthly Rent Used: ${effectiveRent.toFixed(2)}</p>
         <p>Estimated Gross Monthly Income: ${monthlyIncome.toFixed(2)}</p>
-        <p className="font-semibold text-slate-700">Rent-to-Income Ratio: {rentBurdenPercentage.toFixed(2)}%</p>
+        <p style={{ color: "var(--text-strong)", fontWeight: 700 }}>
+          Rent-to-Income Ratio: {rentBurdenPercentage.toFixed(2)}%
+        </p>
       </div>
 
       {hasRoommate ? (
@@ -98,36 +120,44 @@ export function RentBurden({ currentMonthlyRent, livingWage }: RentBurdenProps) 
         </p>
       ) : null}
 
-      <div className="w-full overflow-x-auto">
-        <BarChart width={640} height={320} data={chartData} margin={{ top: 20, right: 20, left: 10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis
-            dataKey="label"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#94a3b8" }}
-          />
-          <YAxis
-            unit="%"
-            domain={[0, 100]}
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#94a3b8" }}
-          />
-          <ReferenceLine
-            y={30}
-            stroke="#f43f5e"
-            strokeDasharray="3 3"
-            strokeWidth={2}
-            label={{
-              value: "30% Rent Burden Threshold",
-              position: "top",
-              fill: "#f43f5e",
-              fontSize: 12,
-            }}
-          />
-          <Bar dataKey="ratio" fill={barColor} name="Rent-to-Income Ratio" radius={[6, 6, 0, 0]} />
-        </BarChart>
+      <div className="w-full" style={{ width: "100%", height: "clamp(280px, 52vw, 400px)" }}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={280}
+          minHeight={280}
+          initialDimension={{ width: 640, height: 320 }}
+        >
+          <BarChart data={chartData} margin={{ top: 20, right: 20, left: 10, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-stroke)" />
+            <XAxis
+              dataKey="label"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "var(--text-muted)", fontSize: 12 }}
+            />
+            <YAxis
+              unit="%"
+              domain={[0, 100]}
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "var(--text-muted)", fontSize: 12 }}
+            />
+            <ReferenceLine
+              y={30}
+              stroke="var(--burden-threshold)"
+              strokeWidth={3}
+              label={{
+                value: "30% Rent Burden Threshold",
+                position: "top",
+                fill: "var(--burden-threshold)",
+                fontSize: 13,
+                fontWeight: 700,
+              }}
+            />
+            <Bar dataKey="ratio" fill={barColor} name="Rent-to-Income Ratio" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </section>
   );

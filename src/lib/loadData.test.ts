@@ -40,6 +40,6 @@ describe("getStoryData", () => {
     vi.doMock("../../data/processed.json", () => ({ default: invalidJson }));
 
     const { getStoryData } = await import("./loadData");
-    expect(() => getStoryData()).toThrowError("Invalid processed story data");
+    expect(() => getStoryData()).toThrowError("processed.json failed schema validation");
   });
 });
