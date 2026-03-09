@@ -1,5 +1,7 @@
 # Title: Rent Burden in Newark
 
+**Live Demo:** [Insert Vercel Link Here]
+
 ## Essential Question
 What minimum hourly wage must a single student in Newark, NJ earn to rent a typical apartment without spending more than 30% of their gross income on housing?
 
@@ -44,3 +46,36 @@ Current university students in Newark (e.g., Rutgers-Newark, NJIT, Essex County 
 * **Why this answers the question:**
   * It visually establishes the 30% line as a hard boundary, immediately showing the viewer if their hypothetical wage puts them in the "danger zone."
   * It clearly compares the gap between standard living wages and actual market realities in Newark, giving students a realistic financial target.
+
+## Phase 2: Cleaning & Transform Notes
+
+`scripts/processData.ts` reads both raw CSVs in `data/raw/`, then builds one clean output object for the app:
+- From `living_wage_essex_nj.csv`, it finds the `Category` rows for `Living Wage` and `Minimum Wage`, then extracts values from `1 ADULT - 0 Children`.
+- From `County_zori_uc_sfrcondomfr_sm_m.csv`, it filters for `RegionName = Essex County` and `State = NJ`, collects monthly date columns (2019 onward) into a `rentTrend` time series, and selects the newest valid month as `currentMonthlyRent`.
+- The script validates the output against a Zod schema contract and writes `data/processed.json` for the Next.js app.
+
+### Key Terms
+- **Rent-to-Income Percentage:** Calculated as `(Monthly Rent / Gross Monthly Income) * 100`.
+- **30% Rent Burden Threshold:** The standard federal guideline stating housing costs should not exceed 30% of gross income.
+- **Living Wage:** The hourly rate modeled by the MIT Living Wage Calculator (`$25.03/hr` for a single adult in this dataset).
+
+### Note on Transparency
+There are no hard-coded magic numbers in the app without explanation. Core assumptions and thresholds are named in code and documented in this README.
+
+## Phase 3: Interaction Design
+
+### What it is
+A dynamic wage slider linked to a real-time bar chart showing the user's rent-to-income percentage.
+
+### Why it helps answer the question
+By forcing the user to physically slide the wage scale to bring the bar under the 30% threshold, it provides an immediate, visceral understanding of the gap between baseline minimum/living wages and the actual income required to survive in the Newark housing market.
+
+## Limits & What I'd Do Next
+
+### Limits
+- The Zillow ZORI dataset is aggregated at the county level (Essex County). It does not perfectly capture hyper-local micro-markets, such as the immediate blocks surrounding the NJIT campus in Newark, which might be artificially inflated by student demand.
+- The 30% rule is calculated using gross income, but students pay rent with net (after-tax) income, meaning the true burden is actually heavier than shown.
+
+### What I'd Do Next
+- Integrate a zip-code level dataset or scrape active listings from local off-campus housing portals for higher geographic precision.
+- Add a toggle to include average utility costs (internet, electricity, water) into the total housing burden.

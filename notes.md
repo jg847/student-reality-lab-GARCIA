@@ -1,1 +1,0 @@
-Data sourced from Zillow Research (ZORI) to get median rent prices for Newark, and MIT Living Wage Calculator for baseline wage comparisons. Zillow data needs to be pivoted from wide to long format before use in the app."
