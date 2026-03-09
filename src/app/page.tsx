@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import { AffordabilityCalculator } from "../components/AffordabilityCalculator";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { ResearchCallout } from "../components/ResearchCallout";
 import { RentBurden } from "../components/RentBurden";
@@ -141,6 +142,20 @@ function StorySections({ storyData }: { storyData: ProcessedData }) {
               sourceUrl="https://www.jchs.harvard.edu/americas-rental-housing-2024"
             />
           </div>
+      </section>
+
+      <section className="story-section">
+          <h2>Calculate Your Personal Rent Burden</h2>
+          <p className="story-body">
+            The numbers above show the average picture for Newark renters. But your situation is
+            specific to you. Enter your own numbers below to see exactly where you stand.
+          </p>
+          <p className="story-body">
+            This calculator includes rent sharing, utilities, and optional take-home pay so the
+            result reflects your real monthly pressure, not just a simplified estimate.
+          </p>
+
+          <AffordabilityCalculator />
       </section>
 
       <section className="story-section">
