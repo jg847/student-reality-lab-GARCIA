@@ -23,7 +23,6 @@ This project is for Newark-area college students (NJIT, Rutgers-Newark, Essex Co
 ## Dataset & Provenance (source links + retrieval date + license/usage)
 - **Zillow Observed Rent Index (ZORI), county-level rental series**
   - Link: https://www.zillow.com/research/data/
-  - Retrieval date: 2026-03-09
   - Usage: Zillow Research public dataset; used for educational/academic analysis with source attribution.
 - **MIT Living Wage Calculator, Essex County, NJ**
   - Link: https://livingwage.mit.edu/counties/34013
@@ -80,4 +79,4 @@ This project is for Newark-area college students (NJIT, Rutgers-Newark, Essex Co
 - `data/notes.md`
   - Contains source notes and caveats about data origin and required transforms.
 
-If future semesters require a single `raw.csv` or `raw.json`, this repo can produce one via a scripted export step from `scripts/processData.ts`.
+
