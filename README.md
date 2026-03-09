@@ -26,11 +26,10 @@ This project is for Newark-area college students (NJIT, Rutgers-Newark, Essex Co
   - Usage: Zillow Research public dataset; used for educational/academic analysis with source attribution.
 - **MIT Living Wage Calculator, Essex County, NJ**
   - Link: https://livingwage.mit.edu/counties/34013
-  - Retrieval date: 2026-03-09
+  - =
   - Usage: Educational use with attribution; copyrighted by Dr. Amy K. Glasmeier and MIT.
 - **Contextual wage examples (labor-market snapshots)**
   - Link: https://www.indeed.com/
-  - Retrieval date: 2026-03-09
   - Usage: Public listing snapshots used as contextual examples in narrative components, not as canonical source-of-truth wage series.
 
 ## Data Dictionary (minimum 5 rows: column -> meaning -> units)
