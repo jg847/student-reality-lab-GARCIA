@@ -62,7 +62,7 @@ This project is for Newark-area college students (NJIT, Rutgers-Newark, Essex Co
 - Burden thresholds are standardized but do not capture personal debt load, family support, or commuting tradeoffs.
 
 ## Draft Chart Screenshot (from Sheets/Excel) + 2 bullets explaining why the chart answers the question
-(![Excel Data](image.png))
+(![Excel Data](![alt text](image-1.png)))
 
 - The chart directly compares observed rent trend growth against realistic student/entry wage baselines, making the affordability gap visible.
 - The 30% threshold framing lets a viewer quickly see when a scenario transitions from manageable to rent-burdened.
