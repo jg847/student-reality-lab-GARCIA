@@ -2,10 +2,13 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AffordabilityCalculator } from "./AffordabilityCalculator";
 
-function fillRequired(income: string, rent: string, utilities = "150") {
+function fillRequired(income: string, rent: string, utilities = "150", rentPct = "100") {
   fireEvent.change(screen.getByLabelText(/monthly gross income/i), { target: { value: income } });
   fireEvent.change(screen.getByLabelText(/total monthly rent for the unit/i), {
     target: { value: rent },
+  });
+  fireEvent.change(screen.getByLabelText(/percent of rent you pay/i), {
+    target: { value: rentPct },
   });
   fireEvent.change(screen.getByLabelText(/monthly utilities/i), {
     target: { value: utilities },
@@ -21,22 +24,21 @@ describe("AffordabilityCalculator", () => {
     expect(screen.getByText(/gross burden percentage:/i).closest("p")).toHaveTextContent("55.00%");
   });
 
-  it("splits rent share correctly for 0, 1, 2, and 3 roommates", () => {
+  it("calculates rent share using entered rent percentage", () => {
     render(<AffordabilityCalculator />);
 
-    fillRequired("5000", "2400", "0");
+    fillRequired("5000", "2400", "0", "25");
+    expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$600.00");
 
-    expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$2400.00");
-
-    const plus = screen.getByRole("button", { name: /increase roommates/i });
-    fireEvent.click(plus);
+    fireEvent.change(screen.getByLabelText(/percent of rent you pay/i), {
+      target: { value: "50" },
+    });
     expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$1200.00");
 
-    fireEvent.click(plus);
-    expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$800.00");
-
-    fireEvent.click(plus);
-    expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$600.00");
+    fireEvent.change(screen.getByLabelText(/percent of rent you pay/i), {
+      target: { value: "75" },
+    });
+    expect(screen.getByText(/your rent share:/i).closest("p")).toHaveTextContent("$1800.00");
   });
 
   it("calculates hourly wage needed to two decimals", () => {

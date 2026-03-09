@@ -10,7 +10,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ResearchCallout } from "./ResearchCallout";
 
 function parseCurrency(value: string): number {
   const normalized = value.replace(/,/g, "").trim();
@@ -65,21 +64,22 @@ function getVerdict(grossBurden: number) {
 export function AffordabilityCalculator() {
   const [monthlyIncomeInput, setMonthlyIncomeInput] = useState("");
   const [hourlyWageInput, setHourlyWageInput] = useState("");
-  const [roommates, setRoommates] = useState(0);
   const [monthlyRentInput, setMonthlyRentInput] = useState("");
+  const [rentSharePercentInput, setRentSharePercentInput] = useState("100");
   const [utilitiesInput, setUtilitiesInput] = useState("150");
   const [takeHomeInput, setTakeHomeInput] = useState("");
 
   const monthlyIncome = parseCurrency(monthlyIncomeInput);
   const hourlyWage = parseCurrency(hourlyWageInput);
   const totalRent = parseCurrency(monthlyRentInput);
+  const rentSharePercentRaw = parseCurrency(rentSharePercentInput);
+  const rentSharePercentCapped = Math.min(Math.max(rentSharePercentRaw, 0), 100);
   const utilitiesRaw = parseCurrency(utilitiesInput);
   const utilitiesCapped = Math.min(Math.max(utilitiesRaw, 0), 1000);
   const takeHomePay = parseCurrency(takeHomeInput);
 
   const derived = useMemo(() => {
-    const peopleInUnit = roommates + 1;
-    const rentShare = peopleInUnit > 0 ? totalRent / peopleInUnit : 0;
+    const rentShare = totalRent * (rentSharePercentCapped / 100);
     const totalHousingCost = rentShare + utilitiesCapped;
     const grossBurden = monthlyIncome > 0 ? (totalHousingCost / monthlyIncome) * 100 : 0;
     const netBurden = takeHomePay > 0 ? (totalHousingCost / takeHomePay) * 100 : null;
@@ -98,11 +98,10 @@ export function AffordabilityCalculator() {
       hourlyNeededFor30,
       weeksOfWork,
     };
-  }, [hourlyWage, monthlyIncome, roommates, takeHomePay, totalRent, utilitiesCapped]);
+  }, [hourlyWage, monthlyIncome, takeHomePay, totalRent, rentSharePercentCapped, utilitiesCapped]);
 
   const canRenderResults = monthlyIncome > 0 && totalRent > 0;
   const verdict = getVerdict(derived.grossBurden);
-  const isBurdened = derived.grossBurden > 30;
 
   const chartData = [{ name: "Your burden", burden: Number(derived.grossBurden.toFixed(2)) }];
 
@@ -163,31 +162,6 @@ export function AffordabilityCalculator() {
           </div>
 
           <div className="calc-field">
-            <span className="calc-label">Number of roommates</span>
-            <div className="calc-stepper" role="group" aria-label="Roommate stepper">
-              <button
-                type="button"
-                className="calc-stepper-btn"
-                onClick={() => setRoommates((prev) => Math.max(0, prev - 1))}
-                aria-label="Decrease roommates"
-              >
-                -
-              </button>
-              <span className="calc-stepper-value" aria-live="polite">
-                {roommates}
-              </span>
-              <button
-                type="button"
-                className="calc-stepper-btn"
-                onClick={() => setRoommates((prev) => Math.min(5, prev + 1))}
-                aria-label="Increase roommates"
-              >
-                +
-              </button>
-            </div>
-          </div>
-
-          <div className="calc-field">
             <label className="calc-label" htmlFor="monthlyRent">
               Total monthly rent for the unit
             </label>
@@ -201,9 +175,30 @@ export function AffordabilityCalculator() {
               placeholder="e.g. 2200"
             />
             <p className="calc-helper">
-              This is the full rent, not your share - we will calculate your share based on your
-              roommates.
+              This is the full rent for the unit. Your share is calculated using your rent
+              percentage below.
             </p>
+          </div>
+
+          <div className="calc-field">
+            <label className="calc-label" htmlFor="rentSharePercent">
+              Percent of rent you pay
+            </label>
+            <input
+              id="rentSharePercent"
+              className="calc-input"
+              type="text"
+              inputMode="decimal"
+              value={rentSharePercentInput}
+              onChange={(event) => setRentSharePercentInput(event.target.value)}
+              placeholder="e.g. 50"
+            />
+            <p className="calc-helper">
+              Enter your actual share of the total unit rent as a percentage.
+            </p>
+            {rentSharePercentRaw > 100 ? (
+              <p className="calc-alert">Rent percentage above 100 was capped at 100%.</p>
+            ) : null}
           </div>
 
           <div className="calc-field">
@@ -272,11 +267,6 @@ export function AffordabilityCalculator() {
             <p>
               <strong>Your rent share:</strong> {formatMoney(derived.rentShare)}
             </p>
-            {roommates > 0 ? (
-              <p className="calc-helper" style={{ marginTop: "-0.25rem" }}>
-                Split between you and your roommate(s) - assumes equal split.
-              </p>
-            ) : null}
             <p>
               <strong>Total housing cost (rent + utilities):</strong>{" "}
               {formatMoney(derived.totalHousingCost)}
@@ -329,16 +319,6 @@ export function AffordabilityCalculator() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-
-          {isBurdened ? (
-            <ResearchCallout
-              title="What Research Says"
-              finding="Harvard JCHS reports that half of U.S. renters are cost burdened, and sustained burden levels are linked with higher instability and tougher tradeoffs on essentials."
-              sourceLabel="Harvard JCHS - America's Rental Housing"
-              sourceUrl="https://www.jchs.harvard.edu/americas-rental-housing-2024"
-            />
-          ) : null}
-
         </section>
       ) : null}
     </section>
